@@ -1,1 +1,0 @@
-g++ drongo_c/main.cpp drongo_c/tokenizer.cpp drongo_c/parser.cpp -o ./drongo_c

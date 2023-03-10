@@ -1,1 +1,0 @@
-g++ -O3 dvm/main.cpp dvm/vm.cpp -o ./drongo
