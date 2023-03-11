@@ -45,9 +45,19 @@ std::vector<Token> tokenize(const std::string& input) {
                 for (auto x : current_value) {
                     str = str + x;
                 }
-                if (str == "push8" || str == "push16" || str == "push32" || str == "push64" || str == "ptr8" || str == "ptr16" || str == "ptr32" || str == "ptr64" || str == "@add") {
+                if (str == "push8" || str == "push16" || str == "push32" || str == "push64" ||
+                    str == "pushu8" || str == "pushu16" || str == "pushu32" || str == "pushu64" ||
+                    str == "ptr8" || str == "ptr16" || str == "ptr32" || str == "ptr64" ||
+                    str == "ptru8" || str == "ptru16" || str == "ptru32" || str == "ptru64" ||
+                    str == "@add" || str == "->" || str == "print"
+                ) {
                     current_type = Keyword;
                     std::cout << "Key" << '\n';
+                } else if (str == "i8" || str == "i16" || str == "i32" || str == "i64" ||
+                           str == "u8" || str == "u16" || str == "u32" || str == "u64"
+                ) {
+                    current_type = Type;
+                    std::cout << "Type" << '\n';
                 }
             
             }

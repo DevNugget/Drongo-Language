@@ -1,1 +1,4 @@
-21 push8 2 push32 ptr32 ptr8
+21 21 push8
+ptr8 ptr8
+@add -> i8
+print i8

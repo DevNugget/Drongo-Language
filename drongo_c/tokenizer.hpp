@@ -7,7 +7,8 @@
 enum TokenKind {
     Identifier,
     Number,
-    Keyword
+    Keyword,
+    Type
 };
 
 struct Token {

@@ -119,57 +119,164 @@ void VirtualMachine::execute() {
             case PTR_I8: {
                 stack_pointer ptr;
                 ptr.stack_type = "i8";
-                ptr.address = i8_stack.size();
+                ptr.address = i8_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_I16: {
                 stack_pointer ptr;
                 ptr.stack_type = "i16";
-                ptr.address = i16_stack.size();
+                ptr.address = i16_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_I32: {
                 stack_pointer ptr;
                 ptr.stack_type = "i32";
-                ptr.address = i32_stack.size();
+                ptr.address = i32_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_I64: {
                 stack_pointer ptr;
                 ptr.stack_type = "i64";
-                ptr.address = i64_stack.size();
+                ptr.address = i64_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_U8: {
                 stack_pointer ptr;
                 ptr.stack_type = "i8";
-                ptr.address = u8_stack.size();
+                ptr.address = u8_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_U16: {
                 stack_pointer ptr;
                 ptr.stack_type = "i16";
-                ptr.address = u16_stack.size();
+                ptr.address = u16_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_U32: {
                 stack_pointer ptr;
                 ptr.stack_type = "i32";
-                ptr.address = u32_stack.size();
+                ptr.address = u32_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
             }
 
             case PTR_U64: {
                 stack_pointer ptr;
                 ptr.stack_type = "i64";
-                ptr.address = u64_stack.size();
+                ptr.address = u64_stack.size() - 1;
                 pointer_stack.push_back(ptr);
+                break;
+            }
+
+            case PTR_ADD: {
+                stack_pointer ptr2 = pointer_stack.back();
+                pointer_stack.pop_back();
+                stack_pointer ptr1 = pointer_stack.back();
+                pointer_stack.pop_back();
+                int a, b;
+
+                if (ptr2.stack_type == "i8") {
+                    a = i8_stack[ptr2.address];
+                } else if (ptr2.stack_type == "i16") {
+                    a = i16_stack[ptr2.address];
+                } else if (ptr2.stack_type == "i32") {
+                    a = i32_stack[ptr2.address];
+                } else if (ptr2.stack_type == "i64") {
+                    a = i64_stack[ptr2.address];
+                } else if (ptr2.stack_type == "u8") {
+                    a = u8_stack[ptr2.address];
+                } else if (ptr2.stack_type == "u16") {
+                    a = u16_stack[ptr2.address];
+                } else if (ptr2.stack_type == "u32") {
+                    a = u32_stack[ptr2.address];
+                } else if (ptr2.stack_type == "u64") {
+                    a = u64_stack[ptr2.address];
+                }
+
+                if (ptr1.stack_type == "i8") {
+                    b = i8_stack[ptr1.address];
+                } else if (ptr1.stack_type == "i16") {
+                    b = i16_stack[ptr1.address];
+                } else if (ptr1.stack_type == "i32") {
+                    b = i32_stack[ptr1.address];
+                } else if (ptr1.stack_type == "i64") {
+                    b = i64_stack[ptr1.address];
+                } else if (ptr1.stack_type == "u8") {
+                    b = u8_stack[ptr1.address];
+                } else if (ptr1.stack_type == "u16") {
+                    b = u16_stack[ptr1.address];
+                } else if (ptr1.stack_type == "u32") {
+                    b = u32_stack[ptr1.address];
+                } else if (ptr1.stack_type == "u64") {
+                    b = u64_stack[ptr1.address];
+                }
+                //std::cout << "a: " << a << "\nb: " << b << '\n';
+                return_reg = a + b;
+                break;
+            }
+
+            case I_RET: {
+                int8_t ret_type = code[ip++];
+                switch(ret_type) {
+                    case 8: {
+                        i8_stack.push_back((int8_t)return_reg);
+                        break;
+                    }
+
+                    case 16: {
+                        i16_stack.push_back((int16_t)return_reg);
+                        break;
+                    }
+
+                    case 32: {
+                        i32_stack.push_back((int32_t)return_reg);
+                        break;
+                    }
+
+                    case 64: {
+                        i64_stack.push_back(return_reg);
+                        break;
+                    }
+                }
+                break;
+            }
+
+            case U_RET: {
+                int8_t ret_type = code[ip++];
+                switch(ret_type) {
+                    case 8: {
+                        u8_stack.push_back(return_reg);
+                        break;
+                    }
+
+                    case 16: {
+                        u16_stack.push_back(return_reg);
+                        break;
+                    }
+
+                    case 32: {
+                        u32_stack.push_back(return_reg);
+                        break;
+                    }
+
+                    case 64: {
+                        u64_stack.push_back(return_reg);
+                        break;
+                    }
+                }
+                break;
             }
         }
     }
@@ -191,3 +298,4 @@ bool VirtualMachine::load(const char* filename) {
     }
     return true;
 }
+

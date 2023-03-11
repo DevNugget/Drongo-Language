@@ -27,6 +27,9 @@
 #define PTR_U16  0x17
 #define PTR_U32  0x18
 #define PTR_U64  0x19
+#define PTR_ADD  0x1A
+#define I_RET    0x1B
+#define U_RET    0x1C
 
 #include <cinttypes>
 #include <vector>
@@ -35,6 +38,7 @@
 class VirtualMachine {
 public:
     int ip = 0;
+    int return_reg = 0;
 
     struct stack_pointer {
         std::string stack_type;
