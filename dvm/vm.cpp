@@ -1,8 +1,10 @@
-#include "vm.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <string>
+
+#include "vm.hpp"
+#include "errors.hpp"
 
 void VirtualMachine::total_mem() {
     size_t total_mem = 0;
@@ -14,6 +16,7 @@ void VirtualMachine::total_mem() {
     total_mem += i32_stack.capacity() * sizeof(int32_t);
     total_mem += i16_stack.capacity() * sizeof(int16_t);
     total_mem += i8_stack.capacity() * sizeof(int8_t);
+    total_mem += pointer_stack.capacity() * sizeof(stack_pointer);
     std::cout << "Total memory usage: " << total_mem << " bytes\n";
 }
 
@@ -27,95 +30,127 @@ void VirtualMachine::execute() {
             case END: {
                 return;
             }
-
+            
             case I8_PUSH: {
                 i8_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case I16_PUSH: {
                 i16_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case I32_PUSH: {
                 i32_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case I64_PUSH: {
                 i64_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case U8_PUSH: {
                 u8_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case U16_PUSH: {
                 u16_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case U32_PUSH: {
                 u32_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case U64_PUSH: {
                 u64_stack.push_back(code[ip++]);
                 break;
             }
-
+            
             case I8_PUT: {
-                std::cout << (int32_t)i8_stack.back() << '\n';
-                i8_stack.pop_back();
+                if (!i8_stack.empty()) {
+                    std::cout << (int32_t)i8_stack.back() << '\n';
+                    i8_stack.pop_back();
+                } else {
+                    error("No elements in 8-bit int stack to print.");
+                }
                 break;
             }
-
+            
             case I16_PUT: {
-                std::cout << (int32_t)i16_stack.back() << '\n';
-                i16_stack.pop_back();
+                if (!i16_stack.empty()) {
+                    std::cout << (int32_t)i16_stack.back() << '\n';
+                    i16_stack.pop_back();
+                } else {
+                    error("No elements in 16-bit int stack to print.");
+                }
                 break;
             }
-
+            
             case I32_PUT: {
-                std::cout << i32_stack.back() << '\n';
-                i32_stack.pop_back();
+                if (!i32_stack.empty()) {
+                    std::cout << i32_stack.back() << '\n';
+                    i32_stack.pop_back();
+                } else {
+                    error("No elements in 32-bit int stack to print.");
+                }
                 break;
             }
-
+            
             case I64_PUT: {
-                std::cout << i64_stack.back() << '\n';
-                i64_stack.pop_back();
+                if (!i64_stack.empty()) {
+                    std::cout << i64_stack.back() << '\n';
+                    i64_stack.pop_back();
+                } else {
+                    error("No elements in 64-bit int stack to print.");
+                }
                 break;
             }
-
+            
             case U8_PUT: {
-                std::cout << (int32_t)u8_stack.back() << '\n';
-                u8_stack.pop_back();
+                if (!u8_stack.empty()) {
+                    std::cout << (int32_t)u8_stack.back() << '\n';
+                    u8_stack.pop_back();
+                } else {
+                    error("No elements in 8-bit unsigned int stack to print.");
+                }
                 break;
             }
-
+            
             case U16_PUT: {
-                std::cout << (int32_t)u16_stack.back() << '\n';
-                u16_stack.pop_back();
+                if (!u16_stack.empty()) {
+                    std::cout << (int32_t)u16_stack.back() << '\n';
+                    u16_stack.pop_back();
+                } else {
+                    error("No elements in 16-bit unsigned int stack to print.");
+                }
                 break;
             }
-
+            
             case U32_PUT: {
-                std::cout << u32_stack.back() << '\n';
-                u32_stack.pop_back();
+                if (!u32_stack.empty()) {
+                    std::cout << u32_stack.back() << '\n';
+                    u32_stack.pop_back();
+                } else {
+                    error("No elements in 32-bit unsigned int stack to print.");
+                }
                 break;
             }
-
+            
             case U64_PUT: {
-                std::cout << u64_stack.back() << '\n';
-                u64_stack.pop_back();
+                if (!u64_stack.empty()) {
+                    std::cout << u64_stack.back() << '\n';
+                    u64_stack.pop_back();
+                } else {
+                    error("No elements in 64-bit unsigned int stack to print.");
+                }
                 break;
             }
-
+            
             case PTR_I8: {
                 stack_pointer ptr;
                 ptr.stack_type = "i8";
@@ -123,7 +158,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_I16: {
                 stack_pointer ptr;
                 ptr.stack_type = "i16";
@@ -131,7 +166,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_I32: {
                 stack_pointer ptr;
                 ptr.stack_type = "i32";
@@ -139,7 +174,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_I64: {
                 stack_pointer ptr;
                 ptr.stack_type = "i64";
@@ -147,7 +182,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_U8: {
                 stack_pointer ptr;
                 ptr.stack_type = "i8";
@@ -155,7 +190,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_U16: {
                 stack_pointer ptr;
                 ptr.stack_type = "i16";
@@ -163,7 +198,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_U32: {
                 stack_pointer ptr;
                 ptr.stack_type = "i32";
@@ -171,7 +206,7 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_U64: {
                 stack_pointer ptr;
                 ptr.stack_type = "i64";
@@ -179,14 +214,14 @@ void VirtualMachine::execute() {
                 pointer_stack.push_back(ptr);
                 break;
             }
-
+            
             case PTR_ADD: {
                 stack_pointer ptr2 = pointer_stack.back();
                 pointer_stack.pop_back();
                 stack_pointer ptr1 = pointer_stack.back();
                 pointer_stack.pop_back();
                 int a, b;
-
+                
                 if (ptr2.stack_type == "i8") {
                     a = i8_stack[ptr2.address];
                 } else if (ptr2.stack_type == "i16") {
@@ -204,7 +239,7 @@ void VirtualMachine::execute() {
                 } else if (ptr2.stack_type == "u64") {
                     a = u64_stack[ptr2.address];
                 }
-
+                
                 if (ptr1.stack_type == "i8") {
                     b = i8_stack[ptr1.address];
                 } else if (ptr1.stack_type == "i16") {
@@ -226,7 +261,7 @@ void VirtualMachine::execute() {
                 return_reg = a + b;
                 break;
             }
-
+            
             case I_RET: {
                 int8_t ret_type = code[ip++];
                 switch(ret_type) {
@@ -234,17 +269,17 @@ void VirtualMachine::execute() {
                         i8_stack.push_back((int8_t)return_reg);
                         break;
                     }
-
+                    
                     case 16: {
                         i16_stack.push_back((int16_t)return_reg);
                         break;
                     }
-
+                    
                     case 32: {
                         i32_stack.push_back((int32_t)return_reg);
                         break;
                     }
-
+                    
                     case 64: {
                         i64_stack.push_back(return_reg);
                         break;
@@ -252,7 +287,7 @@ void VirtualMachine::execute() {
                 }
                 break;
             }
-
+            
             case U_RET: {
                 int8_t ret_type = code[ip++];
                 switch(ret_type) {
@@ -260,17 +295,17 @@ void VirtualMachine::execute() {
                         u8_stack.push_back(return_reg);
                         break;
                     }
-
+                    
                     case 16: {
                         u16_stack.push_back(return_reg);
                         break;
                     }
-
+                    
                     case 32: {
                         u32_stack.push_back(return_reg);
                         break;
                     }
-
+                    
                     case 64: {
                         u64_stack.push_back(return_reg);
                         break;

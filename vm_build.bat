@@ -1,1 +1,1 @@
-g++ -O3 dvm/main.cpp dvm/vm.cpp -o ./drongo
+g++ -O3 dvm/main.cpp dvm/vm.cpp dvm/errors.cpp -o ./drongo

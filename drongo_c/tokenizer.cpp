@@ -36,7 +36,6 @@ std::vector<Token> tokenize(const std::string& input) {
                     std::cout << "Iden" << '\n';
                 }
 
-
                 if (skip_next == false) {
                     current_value.push_back(c);
                 } else { skip_next = false; }

@@ -10,6 +10,10 @@ void push_function(std::vector<int> &local_stack_p, std::string &bytecode, std::
     local_stack_p.clear();
 }
 
+void bytecode_append(std::string &bytes, std::string str) {
+    bytes = bytes + str;
+}
+
 std::string parse(std::vector<Token> tokens) {
     std::string bytecode_out;
     std::vector<int> local_stack;
@@ -37,21 +41,21 @@ std::string parse(std::vector<Token> tokens) {
             } 
 
             else if (tokens[tok].value == "ptr8") {
-                bytecode_out = bytecode_out + " 18 ";
+                bytecode_append(bytecode_out, " 18 ");
             } else if (tokens[tok].value == "ptr16") {
-                bytecode_out = bytecode_out + " 19 ";
+                bytecode_append(bytecode_out, " 19 ");
             } else if (tokens[tok].value == "ptr32") {
-                bytecode_out = bytecode_out + " 20 ";
+                bytecode_append(bytecode_out, " 20 ");
             } else if (tokens[tok].value == "ptr64") {
-                bytecode_out = bytecode_out + " 21 ";
+                bytecode_append(bytecode_out, " 21 ");
             } else if (tokens[tok].value == "ptru8") {
-                bytecode_out = bytecode_out + " 22 ";
+                bytecode_append(bytecode_out, " 22 ");
             } else if (tokens[tok].value == "ptru16") {
-                bytecode_out = bytecode_out + " 23 ";
+                bytecode_append(bytecode_out, " 23 ");
             } else if (tokens[tok].value == "ptru32") {
-                bytecode_out = bytecode_out + " 24 ";
+                bytecode_append(bytecode_out, " 24 ");
             } else if (tokens[tok].value == "ptru64") {
-                bytecode_out = bytecode_out + " 25 ";
+                bytecode_append(bytecode_out, " 25 ");
             }
 
             else if (tokens[tok].value == "@add") {

@@ -1,4 +1,1 @@
-21 21 push8
-ptr8 ptr8
-@add -> i8
 print i8
